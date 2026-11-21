@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>HR Digital Services Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1a33">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HRDSP">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+  html,body{margin:0;height:100%;background:#0b1a33;overflow:hidden;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#fff;}
+  #app{position:fixed;inset:0;width:100%;height:100%;border:0;background:#0b1a33;}
+  #splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0b1a33;transition:opacity .35s;z-index:5;}
+  #splash.off{opacity:0;pointer-events:none;}
+  #splash img{width:96px;height:96px;border-radius:22px;}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#FFD36B;animation:sp 1s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  #slow{display:none;text-align:center;font-size:.9rem;line-height:1.5;max-width:320px;color:#c9d4ea;padding:0 16px;}
+  #slow a{display:inline-block;margin-top:10px;padding:9px 18px;border-radius:99px;background:#FFD36B;color:#2b1a00;font-weight:700;text-decoration:none;}
+</style>
+</head>
+<body>
+<div id="splash">
+  <img src="icons/icon-192.png" alt="HRDSP">
+  <div class="spin" id="spin"></div>
+  <div id="slow">Memuat lebih lama dari biasanya. Periksa koneksi internet Anda.<br><a id="direct" href="#" target="_blank" rel="noopener">Buka langsung di browser</a></div>
+</div>
+<iframe id="app" title="HR Digital Services Portal"
+  allow="clipboard-write; clipboard-read; fullscreen; camera; microphone; geolocation; downloads"
+  referrerpolicy="no-referrer-when-downgrade"></iframe>
+<script>
+(function(){
+  // URL web app Apps Script (deployment /exec)
+  var EXEC='https://script.google.com/a/macros/finansia.com/s/AKfycbycze1omjwi7qcf733pwJO0vkt_-Db2nhexo9C7t3plPrJWZcc52Uyl8ONlzByui0eK/exec';
+  // teruskan parameter dari alamat cangkang, mis. ?page=IndexPerformanceReview
+  var url=EXEC+(location.search||'');
+  var f=document.getElementById('app'),sp=document.getElementById('splash');
+  document.getElementById('direct').href=url;
+  f.addEventListener('load',function(){sp.classList.add('off');clearTimeout(t);});
+  var t=setTimeout(function(){document.getElementById('slow').style.display='block';document.getElementById('spin').style.display='none';},15000);
+  f.src=url;
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+  }
+})();
+</script>
+</body>
+</html>
